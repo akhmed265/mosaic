@@ -2,21 +2,13 @@
   <div id="app">
     <Sidebar />
     <main class="main-content">
-      <HeroSection />
-      <CoursesSection />
-      <div class="content">
-        <div class="container">
-          <!-- Здесь будем добавлять контент страницы -->
-        </div>
-      </div>
+      <router-view />
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
 import Sidebar from '@/components/layout/Sidebar.vue'
-import HeroSection from '@/components/sections/HeroSection.vue'
-import CoursesSection from '@/components/sections/CoursesSection.vue'
 </script>
 
 <style lang="scss">
@@ -51,37 +43,7 @@ body {
   min-height: 100vh;
 }
 
-.content {
-  padding: 2rem;
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    
-    h1 {
-      color: $text-light;
-      margin-bottom: 1rem;
-      font-size: 2rem;
-    }
-    
-    p {
-      color: $text-muted;
-      font-size: 1.1rem;
-    }
-  }
-}
-
-// Адаптивность для скрытого меню
 .sidebar--collapsed ~ .main-content {
   margin-left: 80px;
-}
-
-// Убираем отступы у контейнеров секций
-section {
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
 }
 </style>

@@ -18,17 +18,17 @@
 
     <!-- Навигация -->
     <nav class="sidebar__nav">
-      <a href="#courses" class="nav-item">
+      <a class="nav-item" @click="navigateToHome">
         <div class="nav-icon nav-icon--courses"></div>
         <span class="nav-text" v-if="!isCollapsed">Курсы</span>
-      </a>
+      </a>  
       
       <a href="#languages" class="nav-item">
         <div class="nav-icon nav-icon--languages"></div>
         <span class="nav-text" v-if="!isCollapsed">Языки</span>
       </a>
       
-      <a href="#progress" class="nav-item">
+      <a class="nav-item" @click="navigateToLearningMap">
         <div class="nav-icon nav-icon--progress"></div>
         <span class="nav-text" v-if="!isCollapsed">Карта развития</span>
       </a>
@@ -59,8 +59,25 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import Logo from '@/components/common/Logo.vue'
 
+const router = useRouter()
+
+const navigateToProgress = () => {
+  console.log('Навигация к карте развития')
+  router.push('/learning-map').catch(err => {
+    console.error('Ошибка навигации:', err)
+  })
+}
+
+const navigateToLearningMap = () => {
+  router.push('/learning-map')
+}
+
+const navigateToHome = () => {
+  router.push('/')
+}
 
 const isCollapsed = ref(false)
 const userName = ref('Akhmed Малачиев')
@@ -243,6 +260,7 @@ const toggleSidebar = () => {
   color: $text-light;
   transition: all 0.3s ease;
   border-left: 3px solid transparent;
+  cursor: pointer;
 
   &:hover {
     background: $bg-light;
