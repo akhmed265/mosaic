@@ -7,9 +7,14 @@ const routes = [
     component: () => import('@/views/HomeView.vue')
   },
   {
-    path: '/learning-map', 
+    path: '/learning-map',
     name: 'LearningMap',
     component: () => import('@/views/LearningMapView.vue')
+  },
+  {
+    path: '/skill/:id',
+    name: 'Skill',
+    component: () => import('@/views/SkillView.vue')
   }
 ]
 
