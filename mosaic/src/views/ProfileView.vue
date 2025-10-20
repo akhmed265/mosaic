@@ -16,6 +16,8 @@
           <ProgressStats />
 
           <AchievementShowcase />
+
+          <StudyActivity />
           <!-- Здесь позже добавим AchievementShowcase и StudyActivity -->
         </div>
       </div>
@@ -38,6 +40,7 @@
   import ProgressStats  from '@/components/profile/ProgressStats.vue'
   import ActiveCourses from '@/components/profile/ActiveCourses.vue'
   import AchievementShowcase from '@/components/profile/AchievementShowcase.vue'
+  import StudyActivity from '@/components/profile/StudyActivity.vue'
 </script>
 
 <style lang="scss" scoped>
