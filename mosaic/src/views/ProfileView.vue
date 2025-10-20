@@ -5,20 +5,19 @@
         <UserHeader />
 
         <div class="profile-layout">
-        <!-- Левая колонка -->
         <div class="left-column">
           <ActiveCourses />
-          <!-- Здесь позже добавим DailyGoals -->
+          
+          <DailyGoals />
         </div>
 
-        <!-- Правая колонка -->  
+        
         <div class="right-column">
           <ProgressStats />
 
           <AchievementShowcase />
 
           <StudyActivity />
-          <!-- Здесь позже добавим AchievementShowcase и StudyActivity -->
         </div>
       </div>
       
@@ -41,6 +40,7 @@
   import ActiveCourses from '@/components/profile/ActiveCourses.vue'
   import AchievementShowcase from '@/components/profile/AchievementShowcase.vue'
   import StudyActivity from '@/components/profile/StudyActivity.vue'
+  import DailyGoals from '@/components/profile/DailyGoals.vue'
 </script>
 
 <style lang="scss" scoped>
