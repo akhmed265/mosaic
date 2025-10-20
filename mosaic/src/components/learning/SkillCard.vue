@@ -21,13 +21,14 @@
 
     <!-- Прогресс -->
     <div v-if="skill.status !== 'locked'" class="skill-progress">
-      <div class="progress-info">
-        <span class="progress-text">Прогресс</span>
-        <span class="progress-percent">{{ skill.progress }}%</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" :style="progressStyle"></div>
-      </div>
+      <ProgressBar
+        :value="skill.progress"
+        :color="languageColor"
+        label="Прогресс"
+        :show-info="true"
+        :animated="true"
+        :type="progressType"
+      />
     </div>
 
     <!-- Мета-информация -->
@@ -65,7 +66,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { Skill } from '@/types/learning'
+import ProgressBar from '@/components/common/ProgressBar.vue'
 
 const props = defineProps<{
   skill: Skill
@@ -92,11 +95,12 @@ const statusText = {
   completed: 'Завершено'
 }[props.skill.status]
 
-// Стиль прогресса
-const progressStyle = {
-  width: `${props.skill.progress}%`,
-  background: props.languageColor
-}
+// Тип прогресс-бара в зависимости от прогресса
+const progressType = computed(() => {
+  if (props.skill.progress >= 90) return 'success'
+  if (props.skill.progress >= 70) return 'warning'
+  return 'default'
+})
 
 // Стиль карточки
 const cardStyle = {

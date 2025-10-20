@@ -13,6 +13,15 @@
       <div class="user-info" v-if="!isCollapsed">
         <h3 class="user-name">{{ userName }}</h3>
         <p class="user-status">Учащийся</p>
+        <!-- XPCounter -->
+        <XPCounter
+          :xp="userXP"
+          :level="userLevel"
+          :show-level="true"
+          :show-progress="true"
+          size="small"
+          @levelUp="handleLevelUp"
+        />
       </div>
     </div>
 
@@ -31,6 +40,11 @@
       <a class="nav-item" @click="navigateToLearningMap">
         <div class="nav-icon nav-icon--progress"></div>
         <span class="nav-text" v-if="!isCollapsed">Карта развития</span>
+      </a>
+
+      <a class="nav-item" @click="navigateToProfile">
+        <div class="nav-icon nav-icon--profile"></div>
+        <span class="nav-text" v-if="!isCollapsed">Профиль</span>
       </a>
       
       <a href="#about" class="nav-item">
@@ -61,6 +75,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Logo from '@/components/common/Logo.vue'
+import XPCounter from '@/components/common/XPCounter.vue'
 
 const router = useRouter()
 
@@ -71,12 +86,16 @@ const navigateToProgress = () => {
   })
 }
 
+const navigateToHome = () => {
+  router.push('/')
+}
+
 const navigateToLearningMap = () => {
   router.push('/learning-map')
 }
 
-const navigateToHome = () => {
-  router.push('/')
+const navigateToProfile = () => {
+  router.push('/profile')
 }
 
 const isCollapsed = ref(false)
@@ -101,6 +120,16 @@ const avatarData = computed(() => {
     colors
   }
 })
+
+// Данные пользователя
+const userXP = ref(1250)
+const userLevel = ref(3)
+
+// Обработчик повышения уровня
+const handleLevelUp = (data: { newLevel: number; oldLevel: number }) => {
+  console.log(`Уровень повышен с ${data.oldLevel} на ${data.newLevel}!`)
+  // Здесь можно добавить анимацию или уведомление
+}
 
 const avatarStyle = computed(() => {
   return {
@@ -194,6 +223,13 @@ const toggleSidebar = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  
+  .user-info {
+    text-align: center;
+    width: 100%;
+  }
 }
 
 // Генерация аватарки
@@ -287,6 +323,11 @@ const toggleSidebar = () => {
   &--progress {
     background: linear-gradient(135deg, #f59e0b, #f97316);
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  &--profile {
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+    border-radius: 50%;
   }
 
   &--about {
