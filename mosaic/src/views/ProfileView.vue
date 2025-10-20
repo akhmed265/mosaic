@@ -23,12 +23,6 @@
       
       <div class="profile-content">
         <ProgressStats />
-
-        <div class="coming-soon">
-          <div class="coming-soon-icon">🚧</div>
-          <h3>Профиль в разработке</h3>
-          <p>Скоро здесь появится ваша статистика и достижения!</p>
-        </div>
       </div>
     </div>
   </div>

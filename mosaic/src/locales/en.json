@@ -8,7 +8,8 @@
     "courses": "Courses",
     "languages": "Languages",
     "profile": "Profile",
-    "learningMap": "Learning Map"
+    "learningMap": "Learning Map",
+    "about": "About"  
   },
   "sidebar": {
     "student": "Student",
@@ -44,5 +45,53 @@
     "remove": "Remove",
     "progress": "Progress",
     "level": "Level"
+  },
+  "about": {
+    "title": "About Mosaic",
+    "subtitle": "Next Generation Educational Platform",
+    "mission": {
+      "title": "Our Mission",
+      "subtitle": "Why we created Mosaic",
+      "statement": "Make language learning accessible, engaging and effective for everyone"
+    },
+    "team": {
+      "title": "Our Team",
+      "subtitle": "The people behind Mosaic",
+      "roles": {
+        "fullStack": "Full-stack Developer"
+      },
+      "bio": "Creating educational technologies that transform language learning. Believe that programming and design can make learning accessible and engaging for everyone.",
+      "contributors": "Community & Contributors",
+      "community": "Mosaic Community",
+      "communityDesc": "Our users and testers who help improve the platform"
+    },
+    "stats": {
+      "title": "Mosaic in Numbers",
+      "subtitle": "Our progress and achievements",
+      "progressTitle": "Performance Metrics",
+      "completionRate": "Course Completion Rate",
+      "satisfaction": "User Satisfaction",
+      "retention": "Student Retention"
+    },
+    "tech": {
+      "title": "Technologies",
+      "subtitle": "Modern tech stack for the best experience",
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "tools": "Development Tools",
+      "architecture": "Project Architecture",
+      "modular": "Modular Architecture",
+      "modularDesc": "Component-based approach for easy maintenance and scaling",
+      "performance": "High Performance",
+      "performanceDesc": "Optimized loading and smooth user experience",
+      "maintainable": "Clean Code",
+      "maintainableDesc": "Following best development practices and code style"
+    },
+    "cta": {
+      "title": "Start Your Language Learning Journey",
+      "description": "Join the Mosaic community and discover a new approach to education",
+      "startLearning": "Start Learning",
+      "exploreCourses": "Explore Courses"
+    }
   }
 }

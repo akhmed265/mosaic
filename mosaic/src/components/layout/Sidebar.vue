@@ -36,7 +36,6 @@
       </a>
 
       <!-- Языки с выпадающим меню -->
-      <!-- После меню языков в sidebar__nav -->
       <div class="nav-item-with-dropdown">
         <a class="nav-item" @click="toggleLocaleMenu">
           <div class="nav-icon nav-icon--locale"></div>
@@ -54,11 +53,11 @@
 
             <div class="locales-list">
               <div
-                v-for="loc in availableLocales"
+                v-for="loc in appLocales"
                 :key="loc.code"
                 class="locale-option"
                 :class="{ active: currentLocale === loc.code }"
-                @click="switchLocale(loc.code)"
+                @click="switchAppLocale(loc.code)"
               >
                 <span class="locale-flag">{{ loc.flag }}</span>
                 <span class="locale-name">{{ loc.name }}</span>
@@ -78,7 +77,8 @@
         <span class="nav-text" v-if="!isCollapsed">Профиль</span>
       </a>
 
-      <a href="#about" class="nav-item">
+      <!-- ИСПРАВЛЕННАЯ СТРОКА: navigateToAbout вместо navigateToAbote -->
+      <a class="nav-item" @click="navigateToAbout">
         <div class="nav-icon nav-icon--about"></div>
         <span class="nav-text" v-if="!isCollapsed">О нас</span>
       </a>
@@ -105,12 +105,18 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from 'vue-i18n';
 import Logo from "@/components/common/Logo.vue";
 import XPCounter from "@/components/common/XPCounter.vue";
-import ProgressBar from "@/components/common/ProgressBar.vue";
-import { useAppI18n } from '@/composables/useI18n'
 
 const router = useRouter();
+const { locale } = useI18n();
+
+// ИСПРАВЛЕНО: переименовал переменную чтобы избежать конфликта
+const appLocales = [
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+  { code: 'en', name: 'English', flag: '🇺🇸' }
+];
 
 const navigateToProgress = () => {
   console.log("Навигация к карте развития");
@@ -134,6 +140,11 @@ const navigateToLearningMap = () => {
 
 const navigateToProfile = () => {
   router.push("/profile");
+};
+
+// ИСПРАВЛЕННЫЙ МЕТОД: navigateToAbout вместо navigateToAbote
+const navigateToAbout = () => {
+  router.push("/about");
 };
 
 const isCollapsed = ref(false);
@@ -166,7 +177,6 @@ const userLevel = ref(3);
 // Обработчик повышения уровня
 const handleLevelUp = (data: { newLevel: number; oldLevel: number }) => {
   console.log(`Уровень повышен с ${data.oldLevel} на ${data.newLevel}!`);
-  // Здесь можно добавить анимацию или уведомление
 };
 
 const avatarStyle = computed(() => {
@@ -182,7 +192,6 @@ const toggleSidebar = () => {
 };
 
 // Для выпадающего меню
-// Состояния
 const languagesMenuOpen = ref(false);
 
 // Данные пользовательских языков
@@ -249,14 +258,11 @@ const toggleLanguagesMenu = () => {
 const switchLanguage = (languageCode: string) => {
   currentLanguage.value = languageCode;
   languagesMenuOpen.value = false;
-  // Здесь можно добавить логику смены языка интерфейса
-  // или перехода на страницу языка
   console.log("Переключен язык:", languageCode);
 };
 
 const openLanguageSelector = () => {
   console.log("Открыть селектор языков");
-  // Можно открыть модалку для добавления новых языков
 };
 
 // Закрывать меню при клике вне его
@@ -276,17 +282,15 @@ onUnmounted(() => {
   document.removeEventListener("click", closeLanguagesMenu);
 });
 
-//Для смены языка
-const { 
-  currentLocale, 
-  availableLocales, 
-  switchLocale 
-} = useAppI18n()
-
+// Для смены языка интерфейса
 const localeMenuOpen = ref(false)
 
 const currentLocaleName = computed(() => {
-  return availableLocales.find(loc => loc.code === currentLocale.value)?.name || 'Русский'
+  const localeMap: Record<string, string> = {
+    'ru': 'Русский',
+    'en': 'English'
+  }
+  return localeMap[locale.value] || 'Русский'
 })
 
 const toggleLocaleMenu = () => {
@@ -294,9 +298,12 @@ const toggleLocaleMenu = () => {
 }
 
 const switchAppLocale = (localeCode: string) => {
-  switchLocale(localeCode)
+  locale.value = localeCode
+  localStorage.setItem('user-language', localeCode)
   localeMenuOpen.value = false
 }
+
+const currentLocale = ref(locale.value)
 </script>
 
 <style lang="scss" scoped>
@@ -499,6 +506,11 @@ const switchAppLocale = (localeCode: string) => {
     border-radius: 4px;
     transform: skewX(-10deg);
   }
+
+  &--locale {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border-radius: 50%;
+  }
 }
 
 .nav-text {
@@ -540,32 +552,6 @@ const switchAppLocale = (localeCode: string) => {
 
 .nav-item-with-dropdown {
   position: relative;
-}
-
-.languages-dropdown {
-  position: absolute;
-  left: 100%;
-  top: 0;
-  width: 280px;
-  background: #1a1a1a;
-  border: 1px solid #2d2d2d;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  z-index: 1001;
-  margin-left: 8px;
-
-  &::before {
-    content: "";
-    position: absolute;
-    left: -6px;
-    top: 20px;
-    width: 12px;
-    height: 12px;
-    background: #1a1a1a;
-    border-left: 1px solid #2d2d2d;
-    border-bottom: 1px solid #2d2d2d;
-    transform: rotate(45deg);
-  }
 }
 
 .locale-dropdown {
@@ -626,11 +612,6 @@ const switchAppLocale = (localeCode: string) => {
   }
 }
 
-.nav-icon--locale {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border-radius: 50%;
-}
-
 .dropdown-header {
   display: flex;
   justify-content: space-between;
@@ -643,130 +624,6 @@ const switchAppLocale = (localeCode: string) => {
     font-size: 0.9rem;
     font-weight: 700;
     margin: 0;
-  }
-
-  .add-language-btn {
-    background: #8b5cf6;
-    color: white;
-    border: none;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 700;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background: #7c3aed;
-      transform: scale(1.1);
-    }
-  }
-}
-
-.languages-list {
-  max-height: 300px;
-  overflow-y: auto;
-  padding: 0.5rem;
-}
-
-.language-option {
-  padding: 0.75rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 0.25rem;
-
-  &:hover {
-    background: #2d2d2d;
-  }
-
-  &.active {
-    background: #8b5cf620;
-    border: 1px solid #8b5cf6;
-  }
-
-  &.has-progress {
-    .language-main {
-      margin-bottom: 0.5rem;
-    }
-  }
-}
-
-.language-main {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-
-  .language-flag {
-    font-size: 1.2rem;
-    flex-shrink: 0;
-  }
-
-  .language-name {
-    color: #f8fafc;
-    font-weight: 600;
-    flex: 1;
-  }
-
-  .language-level {
-    color: #94a3b8;
-    font-size: 0.8rem;
-    font-weight: 700;
-    background: #2d2d2d;
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-  }
-}
-
-.language-progress {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-
-  .progress-bar {
-    flex: 1;
-  }
-
-  .progress-text {
-    color: #94a3b8;
-    font-size: 0.8rem;
-    font-weight: 600;
-    min-width: 40px;
-    text-align: right;
-  }
-}
-
-.language-stats {
-  .start-learning {
-    color: #8b5cf6;
-    font-size: 0.8rem;
-    font-weight: 600;
-  }
-}
-
-.dropdown-footer {
-  padding: 1rem 1.25rem;
-  border-top: 1px solid #2d2d2d;
-
-  .manage-languages-btn {
-    width: 100%;
-    background: transparent;
-    border: 1px solid #64748b;
-    color: #94a3b8;
-    padding: 0.75rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-
-    &:hover {
-      border-color: #8b5cf6;
-      color: #8b5cf6;
-    }
   }
 }
 
@@ -791,28 +648,5 @@ const switchAppLocale = (localeCode: string) => {
 .dropdown-leave-to {
   opacity: 0;
   transform: translateX(-10px);
-}
-
-// Адаптивность
-@media (max-width: 768px) {
-  .languages-dropdown {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 90vw;
-    max-width: 400px;
-    margin: 0;
-
-    &::before {
-      display: none;
-    }
-  }
-}
-
-// Обновим стиль иконки языков
-.nav-icon--languages {
-  background: conic-gradient(from 45deg, #10b981, #06b6d4, #10b981);
-  border-radius: 50% 20% 50% 20%;
 }
 </style>
