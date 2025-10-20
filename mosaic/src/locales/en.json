@@ -1,0 +1,48 @@
+{
+  "app": {
+    "name": "Mosaic",
+    "slogan": "Educational Platform"
+  },
+  "navigation": {
+    "home": "Home",
+    "courses": "Courses",
+    "languages": "Languages",
+    "profile": "Profile",
+    "learningMap": "Learning Map"
+  },
+  "sidebar": {
+    "student": "Student",
+    "login": "Login",
+    "register": "Register"
+  },
+  "courses": {
+    "popular": "Popular Courses",
+    "search": "Search courses...",
+    "backToMap": "Back to Learning Map",
+    "exercisesCount": "{count} exercises",
+    "xp": "XP",
+    "lessons": "Course Lessons",
+    "start": "Start",
+    "repeat": "Repeat",
+    "yourProgress": "Your Progress",
+    "lessonsCompleted": "{completed}/{total} lessons completed",
+    "resources": "Resources",
+    "presentation": "Presentation",
+    "audioMaterials": "Audio Materials",
+    "download": "Download",
+    "filters": {
+      "allLanguages": "All languages",
+      "allLevels": "All levels",
+      "allCategories": "All categories"
+    }
+  },
+  "language": {
+    "manage": "Manage Languages",
+    "add": "Add Language",
+    "current": "Current",
+    "setCurrent": "Set as Current",
+    "remove": "Remove",
+    "progress": "Progress",
+    "level": "Level"
+  }
+}

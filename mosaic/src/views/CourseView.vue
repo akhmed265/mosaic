@@ -1,27 +1,24 @@
 <template>
   <div class="course-view">
     <div class="container">
-      <!-- Хлебные крошки -->
       <div class="breadcrumbs">
-        <router-link to="/learning-map">← Назад к карте развития</router-link>
+        <router-link to="/learning-map">← {{ $t('course.backToMap') }}</router-link>
       </div>
 
-      <!-- Заголовок курса -->
       <div class="course-header">
         <h1>{{ course.title }}</h1>
         <p class="course-description">{{ course.description }}</p>
         
         <div class="course-meta">
           <span class="meta-item">⏱️ {{ course.estimatedTime }}</span>
-          <span class="meta-item">📝 {{ course.exercises }} упражнений</span>
-          <span class="meta-item">⭐ +{{ course.rewards.xp }} XP</span>
+          <span class="meta-item">📝 {{ $t('course.exercisesCount', { count: course.exercises }) }}</span>
+          <span class="meta-item">⭐ +{{ course.rewards.xp }} {{ $t('course.xp') }}</span>
         </div>
       </div>
 
-      <!-- Контент курса -->
       <div class="course-content">
         <div class="lessons-list">
-          <h3>Уроки курса</h3>
+          <h3>{{ $t('course.lessons') }}</h3>
           <div 
             v-for="lesson in course.lessons" 
             :key="lesson.id"
@@ -36,14 +33,14 @@
               <p>{{ lesson.description }}</p>
               <div class="lesson-meta">
                 <span>🕒 {{ lesson.duration }}</span>
-                <span>🎯 {{ lesson.exercisesCount }} упр.</span>
+                <span>🎯 {{ $t('course.exercisesCount', { count: lesson.exercisesCount }) }}</span>
               </div>
             </div>
             <button 
               class="lesson-start-btn"
               @click="startLesson(lesson)"
             >
-              {{ lesson.completed ? 'Повторить' : 'Начать' }}
+              {{ lesson.completed ? $t('course.repeat') : $t('course.start') }}
             </button>
           </div>
         </div>
@@ -51,22 +48,22 @@
         <!-- Боковая панель -->
         <div class="course-sidebar">
           <div class="progress-card">
-            <h4>Ваш прогресс</h4>
+            <h4>{{ $t('course.yourProgress') }}</h4>
             <div class="progress-circle">
               <div class="circle-value">{{ courseProgress }}%</div>
             </div>
-            <p>{{ completedLessons }}/{{ course.lessons.length }} уроков завершено</p>
+            <p>{{ $t('course.lessonsCompleted', { completed: completedLessons, total: course.lessons.length }) }}</p>
           </div>
 
           <div class="resources-card">
-            <h4>Ресурсы</h4>
+            <h4>{{ $t('course.resources') }}</h4>
             <div class="resource-item">
-              <span>📚 Презентация</span>
-              <button @click="downloadResource">Скачать</button>
+              <span>📚 {{ $t('course.presentation') }}</span>
+              <button @click="downloadResource">{{ $t('course.download') }}</button>
             </div>
             <div class="resource-item">
-              <span>🎧 Аудио материалы</span>
-              <button @click="downloadResource">Скачать</button>
+              <span>🎧 {{ $t('course.audioMaterials') }}</span>
+              <button @click="downloadResource">{{ $t('course.download') }}</button>
             </div>
           </div>
         </div>

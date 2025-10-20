@@ -1,0 +1,48 @@
+{
+  "app": {
+    "name": "Mosaic",
+    "slogan": "Образовательная платформа"
+  },
+  "navigation": {
+    "home": "Главная",
+    "courses": "Курсы",
+    "languages": "Языки",
+    "profile": "Профиль",
+    "learningMap": "Карта развития"
+  },
+  "sidebar": {
+    "student": "Учащийся",
+    "login": "Вход",
+    "register": "Регистрация"
+  },
+  "courses": {
+    "popular": "Популярные курсы",
+    "search": "Поиск курсов...",
+    "backToMap": "Назад к карте развития",
+    "exercisesCount": "{count} упражнений",
+    "xp": "XP",
+    "lessons": "Уроки курса",
+    "start": "Начать",
+    "repeat": "Повторить",
+    "yourProgress": "Ваш прогресс",
+    "lessonsCompleted": "{completed}/{total} уроков завершено",
+    "resources": "Ресурсы",
+    "presentation": "Презентация",
+    "audioMaterials": "Аудио материалы",
+    "download": "Скачать",
+    "filters": {
+      "allLanguages": "Все языки",
+      "allLevels": "Все уровни",
+      "allCategories": "Все категории"
+    }
+  },
+  "language": {
+    "manage": "Управление языками",
+    "add": "Добавить язык",
+    "current": "Текущий",
+    "setCurrent": "Сделать текущим",
+    "remove": "Удалить",
+    "progress": "Прогресс",
+    "level": "Уровень"
+  }
+}
