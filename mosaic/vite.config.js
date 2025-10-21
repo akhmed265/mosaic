@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
     plugins: [vue()],
-    base: '/mosaic/', // замените на имя вашего репозитория
+    base: '/mosaic/',
   resolve: {
     alias: {
       '@': resolve(__dirname, './src')
