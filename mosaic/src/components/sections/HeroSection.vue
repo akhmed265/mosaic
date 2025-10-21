@@ -31,17 +31,22 @@
                     <span class="ai-text">Чат-помощник</span>
                   </button>
 
+                  <button @click="openAITranslator" class="ai-action">
+                    <span class="ai-icon">🔤</span>
+                    <span>AI Переводчик</span>
+                  </button>
+
                   <button class="ai-action" @click="openAIRecommendations">
                     <span class="ai-icon">🎯</span>
                     <span class="ai-text">Рекомендации</span>
                   </button>
 
-                  <button class="ai-action" @click="startPronunciation">
+                  <button class="ai-action" @click="openAIPronunciation">
                     <span class="ai-icon">🎤</span>
                     <span class="ai-text">Практика речи</span>
                   </button>
 
-                  <button class="ai-action" @click="checkGrammar">
+                  <button class="ai-action" @click="openAIGrammarCheck">
                     <span class="ai-icon">📝</span>
                     <span class="ai-text">Проверка текста</span>
                   </button>
@@ -194,10 +199,25 @@
     @close="isAIChatOpen = false"
   />
 
-  <AIRecommendations 
+  <AIRecommendations
     :is-open="isAIRecommendationsOpen"
     :current-language="currentLanguage"
     @close="isAIRecommendationsOpen = false"
+  />
+  <AIPronunciation
+    :is-open="isAIPronunciationOpen"
+    :current-language="currentLanguage"
+    @close="isAIPronunciationOpen = false"
+  />
+  <AIGrammarCheck
+    :is-open="isAIGrammarCheckOpen"
+    :current-language="currentLanguage"
+    @close="isAIGrammarCheckOpen = false"
+  />
+  <AITranslator
+    :is-open="isAITranslatorOpen"
+    :current-language="currentLanguage"
+    @close="isAITranslatorOpen = false"
   />
 </template>
 
@@ -207,14 +227,19 @@ import PuzzleFlag from "@/components/hero/PuzzleFlag.vue";
 import QuickTestWizard from "@/components/hero/QuickTestWizard.vue";
 import { useI18n } from "vue-i18n";
 import AIChat from "../ai/AIChat.vue";
-import AIRecommendations from '@/components/ai/AIRecommendations.vue'
+import AIRecommendations from "@/components/ai/AIRecommendations.vue";
+import AIPronunciation from "@/components/ai/AIPronunciation.vue";
+import AIGrammarCheck from "@/components/ai/AIGrammarCheck.vue";
+import AITranslator from "@/components/ai/AITranslator.vue";
 
 const hoveredLanguage = ref<string | null>(null);
 const { t } = useI18n();
 // Состояния для AI компонентов
 const isAIChatOpen = ref(false);
-const isAIRecommendationsOpen = ref(false)
-
+const isAIRecommendationsOpen = ref(false);
+const isAIPronunciationOpen = ref(false);
+const isAIGrammarCheckOpen = ref(false);
+const isAITranslatorOpen = ref(false);
 
 const openAIChat = () => {
   isAIChatOpen.value = true;
@@ -222,9 +247,24 @@ const openAIChat = () => {
 };
 
 const openAIRecommendations = () => {
-  isAIRecommendationsOpen.value = true
-  isAIMenuOpen.value = false
-}
+  isAIRecommendationsOpen.value = true;
+  isAIMenuOpen.value = false;
+};
+
+const openAIPronunciation = () => {
+  isAIPronunciationOpen.value = true;
+  isAIMenuOpen.value = false;
+};
+
+const openAIGrammarCheck = () => {
+  isAIGrammarCheckOpen.value = true;
+  isAIMenuOpen.value = false;
+};
+
+const openAITranslator = () => {
+  isAITranslatorOpen.value = true;
+  isAIMenuOpen.value = false;
+};
 
 const handleTestComplete = (result: any) => {
   console.log("Результат теста:", result);
