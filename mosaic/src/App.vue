@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Sidebar />
+    <Header />
     <main class="main-content">
       <router-view />
     </main>
@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import Sidebar from '@/components/layout/Sidebar.vue'
+import Header from '@/components/layout/Header.vue'
 </script>
 
 <style lang="scss">
@@ -37,13 +37,7 @@ body {
 }
 
 .main-content {
-  margin-left: 280px;
-  transition: margin-left 0.3s ease;
-  background: $bg-dark;
-  min-height: 100vh;
-}
-
-.sidebar--collapsed ~ .main-content {
-  margin-left: 80px;
+  margin-top: 70px;
+  min-height: calc(100vh - 70px);
 }
 </style>
