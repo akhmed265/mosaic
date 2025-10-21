@@ -3,9 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 
 export default defineConfig({
-  export default defineConfig({
     plugins: [vue()],
-    base: '/your-repo-name/', // замените на имя вашего репозитория
+    base: '/mosaic/', // замените на имя вашего репозитория
   resolve: {
     alias: {
       '@': resolve(__dirname, './src')
