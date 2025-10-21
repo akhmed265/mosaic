@@ -9,12 +9,29 @@
     "languages": "Languages",
     "profile": "Profile",
     "learningMap": "Learning Map",
-    "about": "About"  
+    "about": "About"
   },
-  "sidebar": {
-    "student": "Student",
-    "login": "Login",
-    "register": "Register"
+  "hero": {
+    "badge": "Learn languages with AI assistant",
+    "title": "Speak fluently",
+    "subtitle": "in",
+    "cta": {
+      "primary": "Start for free",
+      "secondary": "Explore courses"
+    },
+    "stats": {
+      "students": "Students",
+      "success": "Success",
+      "support": "Support"
+    },
+    "sphere": {
+      "choose": "Choose language"
+    },
+    "progress": {
+      "title": "Your path to fluency",
+      "level": "Level",
+      "beginner": "Beginner"
+    }
   },
   "courses": {
     "popular": "Popular Courses",
@@ -64,14 +81,6 @@
       "contributors": "Community & Contributors",
       "community": "Mosaic Community",
       "communityDesc": "Our users and testers who help improve the platform"
-    },
-    "stats": {
-      "title": "Mosaic in Numbers",
-      "subtitle": "Our progress and achievements",
-      "progressTitle": "Performance Metrics",
-      "completionRate": "Course Completion Rate",
-      "satisfaction": "User Satisfaction",
-      "retention": "Student Retention"
     },
     "tech": {
       "title": "Technologies",

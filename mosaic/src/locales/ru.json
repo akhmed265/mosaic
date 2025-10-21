@@ -9,12 +9,29 @@
     "languages": "Языки",
     "profile": "Профиль",
     "learningMap": "Карта развития",
-    "about": "О нас"  
+    "about": "О нас"
   },
-  "sidebar": {
-    "student": "Учащийся",
-    "login": "Вход",
-    "register": "Регистрация"
+  "hero": {
+    "badge": "Изучайте языки с AI-помощником",
+    "title": "Говорите свободно",
+    "subtitle": "на",
+    "cta": {
+      "primary": "Начать бесплатно",
+      "secondary": "Посмотреть курсы"
+    },
+    "stats": {
+      "students": "Учеников",
+      "success": "Успех",
+      "support": "Поддержка"
+    },
+    "sphere": {
+      "choose": "Выбери язык"
+    },
+    "progress": {
+      "title": "Ваш путь к fluency",
+      "level": "Уровень",
+      "beginner": "Начинающий"
+    }
   },
   "courses": {
     "popular": "Популярные курсы",
@@ -64,14 +81,6 @@
       "contributors": "Сообщество и контрибьюторы",
       "community": "Сообщество Mosaic",
       "communityDesc": "Наши пользователи и тестеры, которые помогают улучшать платформу"
-    },
-    "stats": {
-      "title": "Mosaic в цифрах",
-      "subtitle": "Наш прогресс и достижения",
-      "progressTitle": "Показатели эффективности",
-      "completionRate": "Процент завершения курсов",
-      "satisfaction": "Удовлетворенность пользователей",
-      "retention": "Удержание студентов"
     },
     "tech": {
       "title": "Технологии",

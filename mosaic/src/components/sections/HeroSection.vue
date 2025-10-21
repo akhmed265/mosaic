@@ -11,16 +11,50 @@
       <div class="hero__content">
         <!-- Текстовый блок -->
         <div class="hero__text">
-          <div class="hero-badge">
+          <div class="hero-badge" @click="toggleAIMenu">
             <span class="badge-dot"></span>
-            Изучайте языки с AI-помощником
+            {{ t("hero.badge") }}
+
+            <span class="ai-sparkle">✨</span>
+
+            <!-- AI Меню -->
+            <transition name="ai-menu">
+              <div v-if="isAIMenuOpen" class="ai-menu">
+                <div class="ai-menu-header">
+                  <h4>AI Помощник</h4>
+                  <p>Выберите действие</p>
+                </div>
+
+                <div class="ai-actions">
+                  <button class="ai-action" @click="openAIChat">
+                    <span class="ai-icon">💬</span>
+                    <span class="ai-text">Чат-помощник</span>
+                  </button>
+
+                  <button class="ai-action" @click="openAIRecommendations">
+                    <span class="ai-icon">🎯</span>
+                    <span class="ai-text">Рекомендации</span>
+                  </button>
+
+                  <button class="ai-action" @click="startPronunciation">
+                    <span class="ai-icon">🎤</span>
+                    <span class="ai-text">Практика речи</span>
+                  </button>
+
+                  <button class="ai-action" @click="checkGrammar">
+                    <span class="ai-icon">📝</span>
+                    <span class="ai-text">Проверка текста</span>
+                  </button>
+                </div>
+              </div>
+            </transition>
           </div>
 
           <h1 class="hero__title">
-            <span class="title-gradient">Говорите свободно</span>
+            <span class="title-gradient">{{ t("hero.title") }}</span>
             <br />
             <span class="title-dynamic" :style="titleStyle">
-              на {{ currentLanguage.name.toLowerCase() }}
+              {{ t("hero.subtitle") }} {{ currentLanguage.name.toLowerCase() }}
             </span>
           </h1>
 
@@ -36,7 +70,7 @@
               :style="buttonStyle"
             >
               <span class="btn-content">
-                <span class="btn-text">Начать бесплатно</span>
+                <span class="btn-text">{{ t("hero.cta.primary") }}</span>
                 <span class="btn-arrow">→</span>
               </span>
               <div class="btn-shine"></div>
@@ -44,7 +78,7 @@
 
             <button class="cta-btn secondary">
               <span class="btn-icon">🎯</span>
-              <span class="btn-text">Посмотреть курсы</span>
+              <span class="btn-text">{{ t("hero.cta.secondary") }}</span>
             </button>
           </div>
 
@@ -52,15 +86,15 @@
           <div class="hero-stats">
             <div class="stat-item">
               <div class="stat-number">10k+</div>
-              <div class="stat-label">Учеников</div>
+              <div class="stat-label">{{ t("hero.stats.students") }}</div>
             </div>
             <div class="stat-item">
               <div class="stat-number">95%</div>
-              <div class="stat-label">Успех</div>
+              <div class="stat-label">{{ t("hero.stats.success") }}</div>
             </div>
             <div class="stat-item">
               <div class="stat-number">24/7</div>
-              <div class="stat-label">Поддержка</div>
+              <div class="stat-label">{{ t("hero.stats.support") }}</div>
             </div>
           </div>
         </div>
@@ -96,7 +130,7 @@
               <div class="center-glow" :style="centerGlowStyle"></div>
               <div class="center-content">
                 <span class="center-flag">{{ currentLanguage.flag }}</span>
-                <span class="center-text">Выбери язык</span>
+                <span class="center-text">{{ t("hero.sphere.choose") }}</span>
               </div>
             </div>
           </div>
@@ -106,10 +140,12 @@
       <!-- Прогресс бар навыков -->
       <div class="skills-progress">
         <div class="progress-header">
-          <h3>Ваш путь к fluency</h3>
+          <h3>{{ t("hero.progress.title") }}</h3>
           <div class="progress-level">
-            Уровень:
-            <span :style="{ color: currentLanguage.color }">Начинающий</span>
+            {{ t("hero.progress.level") }}:
+            <span :style="{ color: currentLanguage.color }">{{
+              t("hero.progress.beginner")
+            }}</span>
           </div>
         </div>
 
@@ -152,14 +188,43 @@
       </div>
     </div>
   </section>
+  <AIChat
+    :is-open="isAIChatOpen"
+    :current-language="currentLanguage"
+    @close="isAIChatOpen = false"
+  />
+
+  <AIRecommendations 
+    :is-open="isAIRecommendationsOpen"
+    :current-language="currentLanguage"
+    @close="isAIRecommendationsOpen = false"
+  />
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import PuzzleFlag from "@/components/hero/PuzzleFlag.vue";
 import QuickTestWizard from "@/components/hero/QuickTestWizard.vue";
+import { useI18n } from "vue-i18n";
+import AIChat from "../ai/AIChat.vue";
+import AIRecommendations from '@/components/ai/AIRecommendations.vue'
 
 const hoveredLanguage = ref<string | null>(null);
+const { t } = useI18n();
+// Состояния для AI компонентов
+const isAIChatOpen = ref(false);
+const isAIRecommendationsOpen = ref(false)
+
+
+const openAIChat = () => {
+  isAIChatOpen.value = true;
+  isAIMenuOpen.value = false;
+};
+
+const openAIRecommendations = () => {
+  isAIRecommendationsOpen.value = true
+  isAIMenuOpen.value = false
+}
 
 const handleTestComplete = (result: any) => {
   console.log("Результат теста:", result);
@@ -238,6 +303,31 @@ const languages = ref([
 ]);
 
 const currentLanguage = ref(languages.value[0]);
+
+// AI Меню
+const isAIMenuOpen = ref(false);
+
+const toggleAIMenu = () => {
+  isAIMenuOpen.value = !isAIMenuOpen.value;
+};
+
+const getRecommendations = () => {
+  console.log("Get AI Recommendations");
+  isAIMenuOpen.value = false;
+  // Здесь можно показать рекомендации
+};
+
+const startPronunciation = () => {
+  console.log("Start Pronunciation Practice");
+  isAIMenuOpen.value = false;
+  // Практика произношения
+};
+
+const checkGrammar = () => {
+  console.log("Check Grammar");
+  isAIMenuOpen.value = false;
+  // Проверка грамматики
+};
 
 // Этапы прогресса
 const progressStages = ref([
@@ -358,40 +448,40 @@ const startQuickTest = () => {
 }
 
 .gradient-orbit {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.1;
-    animation: orbitFloat 20s ease-in-out infinite,
-      parallaxMove 30s ease-in-out infinite;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.1;
+  animation: orbitFloat 20s ease-in-out infinite,
+    parallaxMove 30s ease-in-out infinite;
 
-    &:nth-child(1) {
-      width: 400px;
-      height: 400px;
-      background: linear-gradient(45deg, #8b5cf6, #10b981);
-      top: -200px;
-      right: -100px;
-      animation-delay: 0s, -5s;
-    }
-
-    &:nth-child(2) {
-      width: 300px;
-      height: 300px;
-      background: linear-gradient(45deg, #f59e0b, #ef4444);
-      bottom: -150px;
-      left: 20%;
-      animation-delay: -7s, -12s;
-    }
-
-    &:nth-child(3) {
-      width: 250px;
-      height: 250px;
-      background: linear-gradient(45deg, #06b6d4, #8b5cf6);
-      top: 30%;
-      left: -100px;
-      animation-delay: -14s, -19s;
-    }
+  &:nth-child(1) {
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(45deg, #8b5cf6, #10b981);
+    top: -200px;
+    right: -100px;
+    animation-delay: 0s, -5s;
   }
+
+  &:nth-child(2) {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(45deg, #f59e0b, #ef4444);
+    bottom: -150px;
+    left: 20%;
+    animation-delay: -7s, -12s;
+  }
+
+  &:nth-child(3) {
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(45deg, #06b6d4, #8b5cf6);
+    top: 30%;
+    left: -100px;
+    animation-delay: -14s, -19s;
+  }
+}
 
 @keyframes orbitFloat {
   0%,
@@ -404,7 +494,8 @@ const startQuickTest = () => {
 }
 
 @keyframes parallaxMove {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0px) translateY(0px);
   }
   25% {
@@ -450,6 +541,130 @@ const startQuickTest = () => {
     margin-bottom: 2rem;
     border: 1px solid rgba(139, 92, 246, 0.2);
     transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+
+    .ai-sparkle {
+      margin-left: 0.5rem;
+      animation: sparkle 2s infinite;
+    }
+
+    /* AI Меню */
+    .ai-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 280px;
+      background: rgba(26, 26, 26, 0.95);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 16px;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: 20px;
+        width: 10px;
+        height: 10px;
+        background: rgba(26, 26, 26, 0.95);
+        border-left: 1px solid rgba(139, 92, 246, 0.3);
+        border-top: 1px solid rgba(139, 92, 246, 0.3);
+        transform: rotate(45deg);
+      }
+    }
+
+    .ai-menu-header {
+      text-align: center;
+      margin-bottom: 1rem;
+
+      h4 {
+        color: #f8fafc;
+        margin: 0 0 0.25rem 0;
+        font-size: 1.1rem;
+      }
+
+      p {
+        color: #94a3b8;
+        margin: 0;
+        font-size: 0.9rem;
+      }
+    }
+
+    .ai-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .ai-action {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      background: transparent;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      color: #f8fafc;
+      padding: 0.75rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(139, 92, 246, 0.1);
+        border-color: rgba(139, 92, 246, 0.5);
+        transform: translateX(5px);
+
+        .ai-icon {
+          transform: scale(1.2);
+        }
+      }
+
+      .ai-icon {
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+      }
+
+      .ai-text {
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* Анимации */
+    @keyframes sparkle {
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+      }
+    }
+
+    .ai-menu-enter-active {
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .ai-menu-leave-active {
+      transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .ai-menu-enter-from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+
+    .ai-menu-leave-to {
+      opacity: 0;
+      transform: translateY(-5px) scale(0.98);
+    }
 
     .badge-dot {
       width: 6px;

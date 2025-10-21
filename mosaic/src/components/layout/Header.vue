@@ -53,6 +53,44 @@
         <span class="notification-badge" v-if="unreadNotifications">3</span>
       </button>
 
+      <!-- Переключатель языков -->
+      <div class="language-switcher">
+        <button
+          class="language-globe"
+          :class="{ 'is-rotating': isGlobeRotating }"
+          @click="toggleLanguage"
+        >
+          <div class="globe-sphere">
+            <div class="globe-rings">
+              <div class="ring ring-1"></div>
+              <div class="ring ring-2"></div>
+              <div class="ring ring-3"></div>
+            </div>
+            <div class="globe-core">
+              <span class="current-flag">{{ currentLanguage.flag }}</span>
+            </div>
+            <div class="globe-glow"></div>
+          </div>
+          <span class="language-code">{{ currentLanguage.short }}</span>
+          <span class="language-arrow">▼</span>
+        </button>
+
+        <transition name="globe-dropdown">
+          <div v-if="isLanguageOpen" class="language-dropdown">
+            <button
+              v-for="lang in availableLanguages"
+              :key="lang.code"
+              class="language-option"
+              :class="{ active: currentLanguage.code === lang.code }"
+              @click="switchLanguage(lang)"
+            >
+              <span class="language-flag">{{ lang.flag }}</span>
+              <span class="language-name">{{ lang.name }}</span>
+            </button>
+          </div>
+        </transition>
+      </div>
+
       <!-- Профиль пользователя -->
       <div class="user-menu">
         <button class="user-toggle" @click="toggleUserMenu">
@@ -175,8 +213,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 const router = useRouter();
+const { locale } = useI18n();
 
 // Состояния
 const isScrolled = ref(false);
@@ -199,6 +239,45 @@ const navItems = [
   { name: "Прогресс", path: "/learning-map", icon: "📊" },
   { name: "О нас", path: "/about", icon: "👥" },
 ];
+
+// Языки
+const availableLanguages = [
+  { code: "ru", name: "Русский", flag: "🇷🇺", short: "РУ" },
+  { code: "en", name: "English", flag: "🇺🇸", short: "EN" },
+  { code: "es", name: "Español", flag: "🇪🇸", short: "ES" },
+  { code: "fr", name: "Français", flag: "🇫🇷", short: "FR" },
+  { code: "de", name: "Deutsch", flag: "🇩🇪", short: "DE" },
+  { code: "zh", name: "中文", flag: "🇨🇳", short: "中文" },
+];
+
+const currentLanguage = ref(availableLanguages[0]);
+const isLanguageOpen = ref(false);
+
+// Анимации глобуса
+const isGlobeRotating = ref(false);
+
+const toggleLanguage = () => {
+  isLanguageOpen.value = !isLanguageOpen.value;
+  if (!isLanguageOpen.value) {
+    startGlobeAnimation();
+  }
+};
+
+const switchLanguage = (lang: any) => {
+  startGlobeAnimation();
+  setTimeout(() => {
+    currentLanguage.value = lang;
+    locale.value = lang.code;
+    isLanguageOpen.value = false;
+  }, 300);
+};
+
+const startGlobeAnimation = () => {
+  isGlobeRotating.value = true;
+  setTimeout(() => {
+    isGlobeRotating.value = false;
+  }, 600);
+};
 
 // Анимации логотипа
 const startDisassemble = () => {
@@ -473,10 +552,11 @@ onUnmounted(() => {
 
 /* Анимации для логотипа */
 @keyframes float {
-  0%, 100% { 
+  0%,
+  100% {
     transform: translateY(0px) scale(1);
   }
-  50% { 
+  50% {
     transform: translateY(-2px) scale(1.05);
   }
 }
@@ -522,9 +602,15 @@ onUnmounted(() => {
   border: 1px solid transparent;
 
   &:hover {
-    background: $bg-light;
+    background: transparent;
     color: $primary-color;
     border-color: $primary-color;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+
+    .nav-icon {
+      transform: scale(1.2) rotate(10deg);
+    }
 
     .nav-indicator {
       opacity: 1;
@@ -627,8 +713,10 @@ onUnmounted(() => {
   transition: all 0.3s ease;
 
   &:hover {
-    background: $bg-light;
-    color: $primary-color;
+    background: $primary-color;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
   }
 
   &.notification-btn {
@@ -665,7 +753,13 @@ onUnmounted(() => {
   transition: all 0.3s ease;
 
   &:hover {
-    background: $bg-light;
+    background: transparent;
+    border: 1px solid $primary-color;
+
+    .user-avatar {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 2px $primary-color;
+    }
   }
 }
 
@@ -1027,5 +1121,339 @@ onUnmounted(() => {
 .mobile-menu-enter-from .mobile-menu__content,
 .mobile-menu-leave-to .mobile-menu__content {
   transform: translateX(100%);
+}
+
+/* Переключатель языков */
+.language-switcher {
+  position: relative;
+}
+
+.language-globe {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  color: $text-light;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background: transparent;
+    transform: translateY(-2px);
+
+    .globe-sphere {
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
+    }
+
+    .language-code {
+      color: $primary-color;
+      font-weight: 700;
+    }
+  }
+}
+
+.globe-sphere {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.globe-rings {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .ring {
+    position: absolute;
+    border: 1px solid rgba(139, 92, 246, 0.6);
+    border-radius: 50%;
+    animation: ringPulse 3s ease-in-out infinite;
+
+    &.ring-1 {
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      animation-delay: 0s;
+    }
+
+    &.ring-2 {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      animation-delay: 1s;
+    }
+
+    &.ring-3 {
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      animation-delay: 2s;
+    }
+  }
+}
+
+.globe-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+
+  .current-flag {
+    font-size: 0.7rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  }
+}
+
+.globe-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.3) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+/* Анимации глобуса */
+@keyframes ringPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.3;
+  }
+}
+
+@keyframes globeRotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* Анимация при смене языка */
+.language-globe:active .globe-sphere,
+.is-rotating .globe-sphere {
+  animation: globeRotate 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.language-code {
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.language-arrow {
+  font-size: 0.7rem;
+  transition: transform 0.3s ease;
+}
+
+.language-switcher:hover .language-arrow {
+  transform: rotate(180deg);
+}
+
+/* Неоновое выпадающее меню */
+.language-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  box-shadow: 
+    0 20px 60px rgba(139, 92, 246, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  margin-top: 0.75rem;
+  z-index: 1001;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+      transparent, 
+      rgba(139, 92, 246, 0.1), 
+      rgba(59, 130, 246, 0.1), 
+      rgba(16, 185, 129, 0.1),
+      transparent
+    );
+    border-radius: 18px;
+    z-index: -1;
+    animation: neonBorder 3s linear infinite;
+  }
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: $text-light;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+  
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(139, 92, 246, 0.15), 
+      rgba(59, 130, 246, 0.15),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    background: rgba(139, 92, 246, 0.1);
+    color: #f8fafc;
+    padding-left: 1.5rem;
+    transform: translateX(5px);
+    
+    &::before {
+      left: 100%;
+    }
+    
+    .language-flag {
+      transform: scale(1.3) rotate(10deg);
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+    
+    .language-name {
+      color: $primary-color;
+      font-weight: 700;
+    }
+  }
+
+  &.active {
+    background: linear-gradient(135deg, 
+      rgba(139, 92, 246, 0.2), 
+      rgba(59, 130, 246, 0.1)
+    );
+    color: #f8fafc;
+    
+    &::after {
+      content: '✓';
+      position: absolute;
+      right: 1.25rem;
+      color: $primary-color;
+      font-weight: bold;
+      animation: checkPop 0.3s ease;
+    }
+    
+    .language-flag {
+      filter: drop-shadow(0 0 6px $primary-color);
+    }
+  }
+}
+
+.language-flag {
+  font-size: 1.4rem;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.language-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+/* Анимации */
+@keyframes neonBorder {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes checkPop {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Плавное появление */
+.globe-dropdown-enter-active {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.globe-dropdown-leave-active {
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.globe-dropdown-enter-from {
+  opacity: 0;
+  transform: translateY(-15px) scale(0.95);
+}
+
+.globe-dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
 }
 </style>
